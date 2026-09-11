@@ -120,7 +120,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   placeholder="Username or Security alias"
-                  className="block w-full rounded-xl bg-slate-950 border border-slate-800 pl-10 pr-4 py-3 text-sm text-slate-200 placeholder-slate-650 focus:border-amber-500/80 focus:outline-none focus:ring-1 focus:ring-amber-500/80 transition-all font-sans"
+                  className="block w-full rounded-xl bg-slate-950 border border-slate-800 pl-10 pr-4 py-3 text-sm text-slate-200 placeholder-slate-500 focus:border-amber-500/80 focus:outline-none focus:ring-1 focus:ring-amber-500/80 transition-all font-sans"
                 />
               </div>
             </div>
@@ -146,7 +146,7 @@ export default function LoginScreen({ onLoginSuccess }: LoginScreenProps) {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Enter secret combination"
-                  className="block w-full rounded-xl bg-slate-950 border border-slate-800 pl-10 pr-11 py-3 text-sm text-slate-200 placeholder-slate-650 focus:border-amber-500/80 focus:outline-none focus:ring-1 focus:ring-amber-500/80 transition-all font-sans"
+                  className="block w-full rounded-xl bg-slate-950 border border-slate-800 pl-10 pr-11 py-3 text-sm text-slate-200 placeholder-slate-500 focus:border-amber-500/80 focus:outline-none focus:ring-1 focus:ring-amber-500/80 transition-all font-sans"
                 />
                 <button
                   type="button"
