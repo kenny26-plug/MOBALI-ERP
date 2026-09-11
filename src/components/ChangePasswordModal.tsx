@@ -166,7 +166,7 @@ export default function ChangePasswordModal({ user, onClose, onPasswordChanged }
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
                 placeholder="Enter current password"
-                className="block w-full rounded-xl bg-slate-950 border border-slate-800 pl-9 pr-9 py-2.5 text-sm text-slate-250 placeholder-slate-650 focus:border-amber-500/80 focus:outline-none focus:ring-1 focus:ring-amber-500/80 transition-all font-sans"
+                className="block w-full rounded-xl bg-slate-950 border border-slate-800 pl-9 pr-9 py-2.5 text-sm text-slate-200 placeholder-slate-500 focus:border-amber-500/80 focus:outline-none focus:ring-1 focus:ring-amber-500/80 transition-all font-sans"
               />
               <button
                 type="button"
@@ -235,7 +235,7 @@ export default function ChangePasswordModal({ user, onClose, onPasswordChanged }
           </div>
 
           {/* Real-time Validation Criteria indicator */}
-          <div className="bg-slate-950 rounded-2xl p-4 border border-slate-805 text-[11px] font-mono leading-relaxed text-slate-400 space-y-2">
+          <div className="bg-slate-950 rounded-2xl p-4 border border-slate-800 text-[11px] font-mono leading-relaxed text-slate-400 space-y-2">
             <span className="font-bold text-amber-500 uppercase tracking-widest block text-[9px]">
               Required Password Specifications
             </span>
@@ -244,37 +244,37 @@ export default function ChangePasswordModal({ user, onClose, onPasswordChanged }
                 <span className={`inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border text-[9px] shrink-0 ${checks.length ? 'bg-green-500/10 text-green-400 border-green-500/30' : 'border-slate-800 text-slate-600'}`}>
                   {checks.length ? <Check className="h-2.5 w-2.5" /> : '•'}
                 </span>
-                <span className={checks.length ? 'text-green-450' : 'text-slate-500'}>At least 8 characters</span>
+                <span className={checks.length ? 'text-green-400' : 'text-slate-500'}>At least 8 characters</span>
               </li>
               <li className="flex items-center space-x-1.5">
                 <span className={`inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border text-[9px] shrink-0 ${checks.upper ? 'bg-green-500/10 text-green-400 border-green-500/30' : 'border-slate-800 text-slate-600'}`}>
                   {checks.upper ? <Check className="h-2.5 w-2.5" /> : '•'}
                 </span>
-                <span className={checks.upper ? 'text-green-450' : 'text-slate-500'}>Uppercase Letter (A-Z)</span>
+                <span className={checks.upper ? 'text-green-400' : 'text-slate-500'}>Uppercase Letter (A-Z)</span>
               </li>
               <li className="flex items-center space-x-1.5">
                 <span className={`inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border text-[9px] shrink-0 ${checks.lower ? 'bg-green-500/10 text-green-400 border-green-500/30' : 'border-slate-800 text-slate-600'}`}>
                   {checks.lower ? <Check className="h-2.5 w-2.5" /> : '•'}
                 </span>
-                <span className={checks.lower ? 'text-green-450' : 'text-slate-500'}>Lowercase Letter (a-z)</span>
+                <span className={checks.lower ? 'text-green-400' : 'text-slate-500'}>Lowercase Letter (a-z)</span>
               </li>
               <li className="flex items-center space-x-1.5">
                 <span className={`inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border text-[9px] shrink-0 ${checks.number ? 'bg-green-500/10 text-green-400 border-green-500/30' : 'border-slate-800 text-slate-600'}`}>
                   {checks.number ? <Check className="h-2.5 w-2.5" /> : '•'}
                 </span>
-                <span className={checks.number ? 'text-green-450' : 'text-slate-500'}>Number (0-9)</span>
+                <span className={checks.number ? 'text-green-400' : 'text-slate-500'}>Number (0-9)</span>
               </li>
               <li className="flex items-center space-x-1.5">
                 <span className={`inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border text-[9px] shrink-0 ${checks.special ? 'bg-green-500/10 text-green-400 border-green-500/30' : 'border-slate-800 text-slate-600'}`}>
                   {checks.special ? <Check className="h-2.5 w-2.5" /> : '•'}
                 </span>
-                <span className={checks.special ? 'text-green-450' : 'text-slate-500'}>Special Character</span>
+                <span className={checks.special ? 'text-green-400' : 'text-slate-500'}>Special Character</span>
               </li>
               <li className="flex items-center space-x-1.5">
                 <span className={`inline-flex h-3.5 w-3.5 items-center justify-center rounded-full border text-[9px] shrink-0 ${(newPassword && newPassword === confirmNewPassword) ? 'bg-green-500/10 text-green-400 border-green-500/30' : 'border-slate-800 text-slate-600'}`}>
                   {(newPassword && newPassword === confirmNewPassword) ? <Check className="h-2.5 w-2.5" /> : '•'}
                 </span>
-                <span className={(newPassword && newPassword === confirmNewPassword) ? 'text-green-450' : 'text-slate-500'}>Passwords match</span>
+                <span className={(newPassword && newPassword === confirmNewPassword) ? 'text-green-400' : 'text-slate-500'}>Passwords match</span>
               </li>
             </ul>
           </div>
@@ -292,7 +292,7 @@ export default function ChangePasswordModal({ user, onClose, onPasswordChanged }
               id="modal-submit-pwd-btn"
               type="submit"
               disabled={loading || !isFormValid}
-              className="flex-1 flex items-center justify-center space-x-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:bg-slate-805 disabled:text-slate-500 text-slate-950 py-3 text-xs font-bold tracking-wide transition shadow-md hover:shadow-lg hover:shadow-amber-500/10 cursor-pointer"
+              className="flex-1 flex items-center justify-center space-x-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:bg-slate-800 disabled:text-slate-500 text-slate-950 py-3 text-xs font-bold tracking-wide transition shadow-md hover:shadow-lg hover:shadow-amber-500/10 cursor-pointer"
             >
               <span>{loading ? 'Changing...' : 'Update Password'}</span>
             </button>

@@ -834,18 +834,34 @@ export default function App() {
       'Sales',
       'Remain Stock',
       'Unit Price ($)',
-      'Total Valuation ($)'
+      'Total Valuation ($)',
+      'Purchase Price ($)',
+      'Profit ($)'
     ];
-    const rows = items.map(item => [
-      `"${item.commodityName.replace(/"/g, '""')}"`,
-      item.initialStock,
-      item.purchasedReceived,
-      item.initialStock + item.purchasedReceived,
-      item.sales,
-      (item.initialStock + item.purchasedReceived) - item.sales,
-      item.unitPrice,
-      ((item.initialStock + item.purchasedReceived) - item.sales) * item.unitPrice
-    ]);
+    const rows = items.map(item => {
+      const initialStock = item.initialStock || 0;
+      const purchasedReceived = item.purchasedReceived || 0;
+      const totalStock = initialStock + purchasedReceived;
+      const sales = item.sales || 0;
+      const remainStock = totalStock - sales;
+      const unitPrice = item.unitPrice || 0;
+      const totalValuation = sales * unitPrice;
+      const purchasePrice = item.purchasePrice || 0;
+      const profit = totalValuation - purchasePrice;
+
+      return [
+        `"${item.commodityName.replace(/"/g, '""')}"`,
+        initialStock,
+        purchasedReceived,
+        totalStock,
+        sales,
+        remainStock,
+        unitPrice,
+        totalValuation,
+        purchasePrice,
+        profit
+      ];
+    });
 
     const csvContent = "data:text/csv;charset=utf-8," 
       + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
@@ -1539,10 +1555,10 @@ export default function App() {
                               <th className="p-3 text-right border-r border-gray-200">Unit Price ($)</th>
                               <th className="p-3 text-right border-r bg-indigo-50/50 font-extrabold text-indigo-900">Total Valuation ($)</th>
                               <th className="p-3 text-right border-r border-gray-200">Purch. Price ($)</th>
-                              <th className="p-3 text-right bg-emerald-55 font-extrabold text-emerald-950">Profit ($)</th>
+                              <th className="p-3 text-right bg-emerald-50 font-extrabold text-emerald-950">Profit ($)</th>
                             </tr>
                           </thead>
-                          <tbody className="divide-y divide-gray-150">
+                          <tbody className="divide-y divide-gray-200">
                             {computedItems.map((item) => (
                               <tr key={item.id} className="hover:bg-gray-50/50">
                                 <td className="p-3 font-medium text-gray-900 border-r border-gray-200">
@@ -1709,14 +1725,14 @@ export default function App() {
                   </h3>
 
                   {/* DATE-TO-DATE FILTER */}
-                  <div className="bg-gray-50/50 p-2.5 rounded-lg border border-gray-150 space-y-2 text-xs">
+                  <div className="bg-gray-50/50 p-2.5 rounded-lg border border-gray-200 space-y-2 text-xs">
                     <p className="font-bold text-gray-700 text-[10px] uppercase tracking-wider flex items-center space-x-1">
                       <Calendar className="h-3 w-3 text-indigo-600" />
                       <span>History Review (Date-To-Date)</span>
                     </p>
                     <div className="grid grid-cols-2 gap-2">
                       <div>
-                        <span className="text-[9px] text-gray-450 block mb-0.5">Start (From):</span>
+                        <span className="text-[9px] text-gray-400 block mb-0.5">Start (From):</span>
                         <input
                           type="date"
                           value={historyDateFrom}
@@ -1725,7 +1741,7 @@ export default function App() {
                         />
                       </div>
                       <div>
-                        <span className="text-[9px] text-gray-450 block mb-0.5">End (To):</span>
+                        <span className="text-[9px] text-gray-400 block mb-0.5">End (To):</span>
                         <input
                           type="date"
                           value={historyDateTo}
@@ -1874,7 +1890,7 @@ export default function App() {
                       )}
 
                       {/* SPREADSHEET TABLE GRID FOR DETAIL VIEW (exact columns) */}
-                      <div className="overflow-x-auto border border-gray-150 rounded-lg">
+                      <div className="overflow-x-auto border border-gray-200 rounded-lg">
                         <table id="drilldown-grid-table" className="w-full text-left border-collapse text-xs">
                           <thead className="bg-gray-50/80 text-gray-700 font-semibold border-b">
                             <tr>
@@ -1928,7 +1944,7 @@ export default function App() {
                                   <td className="p-3 text-right border-r font-mono">{totals.sales.toLocaleString()}</td>
                                   <td className="p-3 text-right font-mono bg-gray-100 border-r">{totals.remainStock.toLocaleString()}</td>
                                   <td className="p-3 text-right border-r">—</td>
-                                  <td className="p-3 text-right font-mono text-indigo-900 bg-indigo-55/40 font-bold border-r border-gray-200">${totals.totalValuation.toFixed(2)}</td>
+                                  <td className="p-3 text-right font-mono text-indigo-900 bg-indigo-50/40 font-bold border-r border-gray-200">${totals.totalValuation.toFixed(2)}</td>
                                   <td className="p-3 text-right font-mono border-r border-gray-200 bg-emerald-50/10">${totals.purchasePrice.toFixed(2)}</td>
                                   <td className={`p-3 text-right font-mono font-black ${totals.profit >= 0 ? 'bg-emerald-100 text-emerald-950' : 'bg-red-100 text-red-950'}`}>${totals.profit.toFixed(2)}</td>
                                 </tr>
@@ -2095,9 +2111,9 @@ export default function App() {
               </div>
 
               {/* TIMELINE LIST */}
-              <div className="overflow-x-auto max-h-[500px] border border-gray-150 rounded-lg">
+              <div className="overflow-x-auto max-h-[500px] border border-gray-200 rounded-lg">
                 <table id="audit-trail-table" className="w-full text-left border-collapse text-[11px]">
-                  <thead className="bg-gray-50 sticky top-0 text-gray-650 font-bold border-b border-gray-200">
+                  <thead className="bg-gray-50 sticky top-0 text-gray-600 font-bold border-b border-gray-200">
                     <tr>
                       <th className="p-3">Timestamp (UTC)</th>
                       <th className="p-3">User Node</th>
@@ -2106,7 +2122,7 @@ export default function App() {
                       <th className="p-3">Action Core Log Info</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-gray-150 font-mono">
+                  <tbody className="divide-y divide-gray-200 font-mono">
                     {auditLogs
                       .filter(log => {
                         const word = auditFilter.toLowerCase();
@@ -2159,7 +2175,7 @@ export default function App() {
                   </p>
                 </div>
 
-                <form onSubmit={handleSandboxSearch} className="flex flex-col sm:flex-row items-end gap-3 p-4 bg-gray-50 rounded-xl border border-gray-150">
+                <form onSubmit={handleSandboxSearch} className="flex flex-col sm:flex-row items-end gap-3 p-4 bg-gray-50 rounded-xl border border-gray-200">
                   <div className="w-full sm:flex-1">
                     <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">Target Division</label>
                     <select
@@ -2198,7 +2214,7 @@ export default function App() {
 
                 {/* SEARCH RESULTS VIEW */}
                 {sandboxSearched && (
-                  <div id="sandbox-results" className="pt-4 border-t border-gray-150 space-y-3">
+                  <div id="sandbox-results" className="pt-4 border-t border-gray-200 space-y-3">
                     {sandboxResult ? (
                       <div className="space-y-4">
                         
@@ -2266,7 +2282,7 @@ export default function App() {
                                     <td className="p-3 text-right border-r font-mono bg-gray-100">{totals.remainStock.toLocaleString()}</td>
                                     <td className="p-3 text-right border-r">—</td>
                                     <td className="p-3 text-right font-mono text-indigo-900 bg-indigo-50 font-bold border-r border-gray-200">${totals.totalValuation.toFixed(2)}</td>
-                                    <td className="p-3 text-right font-mono border-r border-gray-200 bg-emerald-50/10 text-emerald-850">${totals.purchasePrice.toFixed(2)}</td>
+                                    <td className="p-3 text-right font-mono border-r border-gray-200 bg-emerald-50/10 text-emerald-800">${totals.purchasePrice.toFixed(2)}</td>
                                     <td className={`p-3 text-right font-mono font-black ${totals.profit >= 0 ? 'bg-emerald-100 text-emerald-950' : 'bg-red-100 text-red-950'}`}>${totals.profit.toFixed(2)}</td>
                                   </tr>
                                 );
@@ -2277,7 +2293,7 @@ export default function App() {
 
                       </div>
                     ) : (
-                      <div className="text-center py-16 rounded-lg bg-gray-50 border border-gray-150">
+                      <div className="text-center py-16 rounded-lg bg-gray-50 border border-gray-200">
                         <AlertCircle className="h-10 w-10 text-gray-400 mx-auto mb-2" />
                         <h4 className="text-xs font-bold text-gray-700">No Prior Approved Snapshots Documented</h4>
                         <p className="text-[11px] text-gray-400 mt-0.5 max-w-sm mx-auto">
@@ -2304,7 +2320,7 @@ export default function App() {
                     Manage operational branch access limits, reset default passwords, alter execution roles, and enforce corporate security policies.
                   </p>
                 </div>
-                <div className="flex bg-gray-50 px-4 py-2 rounded-xl border border-gray-150 text-xs font-mono">
+                <div className="flex bg-gray-50 px-4 py-2 rounded-xl border border-gray-200 text-xs font-mono">
                   <span className="text-gray-400">Total Provisioned:</span>
                   <span className="ml-2 font-bold text-indigo-700">{adminUsers.length} Users</span>
                 </div>
@@ -2497,7 +2513,7 @@ export default function App() {
                       id="admin-create-operator-btn"
                       type="submit"
                       disabled={isSubmitting || !actUsername || !actPassword}
-                      className="w-full inline-flex items-center justify-center space-x-2 rounded-xl bg-indigo-650 hover:bg-indigo-600 text-white font-semibold py-2.5 text-xs focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition-all cursor-pointer font-sans"
+                      className="w-full inline-flex items-center justify-center space-x-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-2.5 text-xs focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 transition-all cursor-pointer font-sans"
                     >
                       <Plus className="h-4 w-4 shrink-0" />
                       <span>{isSubmitting ? 'Creating User...' : 'Provision Secure Operator'}</span>
@@ -2514,7 +2530,7 @@ export default function App() {
 
                   <div className="overflow-x-auto rounded-xl border border-gray-200">
                     <table className="min-w-full divide-y divide-gray-200 text-left text-xs text-gray-600 font-sans">
-                      <thead className="bg-gray-50 text-[10px] font-mono uppercase text-gray-450 tracking-wider">
+                      <thead className="bg-gray-50 text-[10px] font-mono uppercase text-gray-400 tracking-wider">
                         <tr>
                           <th className="p-3">Operator Context</th>
                           <th className="p-3">Operational Role</th>
@@ -2532,7 +2548,7 @@ export default function App() {
                               {/* Operator Context */}
                               <td className="p-3 space-y-1">
                                 <p className="font-bold text-gray-900">{userObj.displayName}</p>
-                                <p className="text-[10px] text-indigo-650 font-bold font-mono">@{userObj.username}</p>
+                                <p className="text-[10px] text-indigo-600 font-bold font-mono">@{userObj.username}</p>
                                 <p className="text-[10px] font-mono text-gray-400 break-all">{userObj.email}</p>
                               </td>
 
@@ -2632,7 +2648,7 @@ export default function App() {
                                         await handleAdminResetPassword(userObj.id, currentResetPass);
                                         setResetPassInputs(prev => ({ ...prev, [userObj.id]: '' }));
                                       }}
-                                      className="px-2 py-1 text-[10px] font-mono bg-indigo-50 hover:bg-indigo-100 text-indigo-750 border border-indigo-200 rounded font-bold disabled:opacity-40 disabled:pointer-events-none cursor-pointer transition-all shrink-0"
+                                      className="px-2 py-1 text-[10px] font-mono bg-indigo-50 hover:bg-indigo-100 text-indigo-700 border border-indigo-200 rounded font-bold disabled:opacity-40 disabled:pointer-events-none cursor-pointer transition-all shrink-0"
                                     >
                                       Reset
                                     </button>
@@ -2700,7 +2716,7 @@ export default function App() {
                 </div>
 
                 {isNewCycleOpen && (
-                  <form onSubmit={handleCreateNewCycle} className="p-3 bg-gray-50 rounded-lg border border-gray-150 space-y-3 text-xs">
+                  <form onSubmit={handleCreateNewCycle} className="p-3 bg-gray-50 rounded-lg border border-gray-200 space-y-3 text-xs">
                     <div>
                       <label className="block text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">Select Report Date (Year, Month, Day)</label>
                       <input
@@ -2845,7 +2861,7 @@ export default function App() {
                 <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm space-y-4">
                   
                   {/* WORKSPACE RIBBON SUMMARY INFO */}
-                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gray-50 p-4 rounded-xl border border-gray-150 gap-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-gray-50 p-4 rounded-xl border border-gray-200 gap-3">
                     <div>
                       <p className="text-[10px] font-bold text-indigo-600 uppercase tracking-widest">Active Ledger Spreadsheet</p>
                       <h3 className="text-md font-bold text-gray-900 mt-0.5">Cycle: Period {selectedReport.reportDate}</h3>
@@ -2873,7 +2889,7 @@ export default function App() {
                        )}
 
                        {selectedReport.submissionStatus === 'approved' && (
-                         <span className="px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-55 text-emerald-800 border border-emerald-250">
+                         <span className="px-3 py-1 text-xs font-semibold rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200">
                            Immutable Archive Lock
                          </span>
                        )}
@@ -2882,7 +2898,7 @@ export default function App() {
 
                   {/* FORMULA ARCHITECTURE INSTRUCTION BANNER */}
                   {selectedReport.submissionStatus === 'draft' || selectedReport.submissionStatus === 'rejected' ? (
-                    <div className="bg-indigo-50 text-indigo-800 rounded-lg p-3.5 text-xs border border-indigo-250 flex items-start space-x-2.5">
+                    <div className="bg-indigo-50 text-indigo-800 rounded-lg p-3.5 text-xs border border-indigo-200 flex items-start space-x-2.5">
                       <Info className="h-4.5 w-4.5 text-indigo-600 shrink-0 mt-0.5" />
                       <div>
                         <strong>Aesthetic Live Grid Configured:</strong> Fill in cell values. Dependent cells will perform live responsive calculations:
@@ -2905,7 +2921,7 @@ export default function App() {
                   {/* CORE EDIT SPREADSHEET TABLE GRID CONTROLLERS */}
                   <div className="text-xs overflow-x-auto border border-gray-200 rounded-lg">
                     <table id="spreadsheet-editable-grid" className="w-full text-left border-collapse text-xs">
-                      <thead className="bg-gray-105 sticky top-0 text-gray-700 font-semibold border-b border-gray-200">
+                      <thead className="bg-gray-100 sticky top-0 text-gray-700 font-semibold border-b border-gray-200">
                         <tr>
                           <th className="p-3 border-r min-w-[120px]">Commodity</th>
                           <th className="p-3 text-right border-r">Initial Stock</th>
@@ -2919,7 +2935,7 @@ export default function App() {
                           <th className="p-3 text-right bg-emerald-50/35 font-bold text-emerald-950">Profit ($)</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-gray-150">
+                      <tbody className="divide-y divide-gray-200">
                         {computedItems.map((item) => {
                           const hasApprovedState = myReports.some(r => r.submissionStatus === 'approved');
                           const isInitialSetup = !hasApprovedState; 
@@ -2940,7 +2956,7 @@ export default function App() {
                               </td>
 
                               {/* INITIAL STOCK */}
-                              <td className="p-2 border-r border-gray-200 bg-gray-55/10">
+                              <td className="p-2 border-r border-gray-200 bg-gray-50/10">
                                 <input
                                   type="number"
                                   disabled={isInitialLocked}
@@ -3064,13 +3080,13 @@ export default function App() {
 
                   {/* BOTTOM SAVE ACTIONS ACTION BAR CONTAINER */}
                   {(selectedReport.submissionStatus === 'draft' || selectedReport.submissionStatus === 'rejected') && (
-                    <div className="flex flex-col sm:flex-row items-center justify-end gap-3 pt-4 border-t border-gray-150">
+                    <div className="flex flex-col sm:flex-row items-center justify-end gap-3 pt-4 border-t border-gray-200">
                       
                       <button
                         id="op-save-draft"
                         disabled={isSubmitting}
                         onClick={handleSaveDraft}
-                        className="w-full sm:w-auto inline-flex items-center justify-center space-x-1.5 rounded-lg border border-gray-350 bg-white text-gray-700 px-4 py-2 hover:bg-gray-50 text-xs font-semibold disabled:bg-gray-100 cursor-pointer transition-colors"
+                        className="w-full sm:w-auto inline-flex items-center justify-center space-x-1.5 rounded-lg border border-gray-300 bg-white text-gray-700 px-4 py-2 hover:bg-gray-50 text-xs font-semibold disabled:bg-gray-100 cursor-pointer transition-colors"
                       >
                         <Save className="h-4 w-4" />
                         <span>Save Working Draft</span>

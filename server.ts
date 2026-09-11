@@ -349,7 +349,7 @@ async function startServer() {
       const db = getDBInstance();
       const u = db.users.find(x => x.id === userId);
       if (!u) {
-        res.status(444).json({ error: 'User not found.' });
+        res.status(404).json({ error: 'User not found.' });
         return;
       }
       const oldRole = u.role;
