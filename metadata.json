@@ -1,0 +1,6 @@
+{
+  "name": "ERP Mobali Supplies",
+  "description": "Enterprise Resource Planning and multi branch inventory ledger system.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
